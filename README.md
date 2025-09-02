@@ -115,7 +115,7 @@ The app will print progress every 50 frames and save the output video next to yo
 
 ---
 
-## 🧠 How it works (plain English)
+## 🧠 How it works
 
 - For each frame, MiDaS predicts a **depth map** (which parts are near/far).  
 - We **normalize** that depth safely and create a **shift map**.  
@@ -134,7 +134,7 @@ This is a **2D‑to‑3D approximation**. It won’t be perfect like true stereo
   - *Balanced:* `DPT_Hybrid`  
   - *Fastest:* `MiDaS_small`
 - **Max shift:** Start with **15**. Try 8–24 depending on content and comfort.
-- **FFmpeg pre‑encode:** If your video fails to open or stutters, choose **Yes**.
+- **FFmpeg pre‑encode:** If your video fails to open or stutters, enable it.
 - **AMP (mixed precision):** Usually faster on RTX GPUs. If you see artifacts or errors, turn it **off**.
 - **Frame rate & size:** Output uses the source **FPS** and **resolution**.  
   SBS doubles width (W → **2W**), height stays the same.
@@ -168,9 +168,6 @@ python "2D to 3D Photo and Video.py"
 - **Weird color/ghosting in Anaglyph.**  
   This is normal if the 3D shift is too strong. **Lower Max shift** or try **SBS**.
 
-- **Depth looks inverted (near/far flipped).**  
-  Try smaller **Max shift**. If the scene still feels wrong, you can try inverting the direction (edit code: swap `map_x_left` and `map_x_right` lines).
-
 - **Artifacts at edges.**  
   The script uses **border replication** to avoid holes. Minor stretching at frame borders is expected.
 
@@ -188,26 +185,15 @@ You can rename the script if you like, just keep the code intact.
 
 ---
 
-## 🗺 Roadmap (ideas)
-
-- CLI flags (non‑interactive mode)  
-- Per‑scene **depth smoothing** / temporal consistency  
-- Adjustable **parallax curve** (non‑linear shift by depth)  
-- **Green/Magenta** anaglyph and other stereo layouts  
-- **Batch processing** of folders
-
----
-
 ## 🤝 Contributing
 
-PRs and issues are welcome. Please describe your system, Python version, and exact steps to reproduce any bug.
+Suggestions and complaints are welcome. Please describe your system, Python version, and exact steps to reproduce any bug.
 
 ---
 
 ## 📜 License
 
-Choose the license you prefer (MIT, Apache‑2.0, etc.) and add a `LICENSE` file.  
-If unsure, MIT is a good simple choice.
+GPL-3.0
 
 ---
 
