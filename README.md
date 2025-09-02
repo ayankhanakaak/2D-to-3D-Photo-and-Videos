@@ -35,14 +35,14 @@ Optional **CUDA acceleration**, **mixed precision** (faster on NVIDIA GPUs), and
 ### Install dependencies
 
 ```bash
-# Create/activate a virtual env (recommended)
+# Create/activate a virtual env (very optional but recommended)
 python -m venv .venv
 # Windows
 .venv\Scripts\activate
 # macOS/Linux
 source .venv/bin/activate
 
-# Core deps
+# Core deps (necessary)
 pip install --upgrade pip
 pip install torch opencv-python numpy
 # If you have an NVIDIA GPU, install the CUDA build of torch per pytorch.org
