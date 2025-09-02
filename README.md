@@ -22,7 +22,7 @@ Optional **CUDA acceleration**, **mixed precision** (faster on NVIDIA GPUs), and
 
 ## 📦 Requirements
 
-- **Python** 3.9+ (3.10/3.11 recommended)
+- **Python** 3.9+ (3.10/3.11 recommended) | 100% Tested on: 3.13.5
 - **Pip packages:**
   - `torch` (CPU or CUDA build)
   - `opencv-python`
