@@ -1,78 +1,218 @@
-2D to 3D Photo and Videos
+# 2D → 3D Video Converter (MiDaS)
 
-This Python program converts 2D videos into 3D formats using depth estimation models. It supports both Red/Cyan Anaglyph and Side-by-Side (SBS) stereo outputs.
+A simple Python tool that converts **normal 2D videos** into **immersive 3D** using **MiDaS depth estimation**.  
+It supports **Red/Cyan Anaglyph** (red–cyan glasses) and **Side‑by‑Side** (SBS) stereo output.  
+Optional **CUDA acceleration**, **mixed precision** (faster on NVIDIA GPUs), and **FFmpeg pre‑encoding** are built‑in for smooth, high‑quality results.
 
-Features
+> **Author:** Ayan Khan  
+> **Current script:** `2D to 3D Photo and Video.py` (v2.9.2025‑1)
 
-Converts 2D videos to 3D using MiDaS depth estimation models
+---
 
-Supports multiple model types: DPT_Large, DPT_Hybrid, MiDaS_small
+## ✨ Highlights
 
-Offers two output formats: Red/Cyan Anaglyph and SBS Stereo
+- **Depth from single frames** with MiDaS models (DPT_Large / DPT_Hybrid / MiDaS_small)
+- **Two 3D formats**: Red/Cyan Anaglyph and Side‑by‑Side (SBS)
+- **CUDA + AMP** (automatic mixed precision) for speed on NVIDIA
+- **FFmpeg pre‑encode** option for reliable decoding of tricky source files
+- **Safe depth normalization** to avoid NaNs/Infs and crashes
+- **Progress prints** every 50 frames and a final saved path
 
-Optional FFmpeg pre-encoding for reliable video decoding
+---
 
-CUDA and mixed precision support for faster processing
+## 📦 Requirements
 
-Requirements
+- **Python** 3.9+ (3.10/3.11 recommended)
+- **Pip packages:**
+  - `torch` (CPU or CUDA build)
+  - `opencv-python`
+  - `numpy`
+- **FFmpeg** (optional, but recommended for the pre‑encode step)
 
-Python 3.7+ (Recommended: 3.13.5)
+> ⚠️ For NVIDIA GPUs, install a **CUDA-enabled** build of PyTorch that matches your driver/CUDA version.  
+> See the official PyTorch site for the correct `pip` command for your system.
 
-PyTorch
+### Install dependencies
 
-OpenCV
+```bash
+# Create/activate a virtual env (recommended)
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# macOS/Linux
+source .venv/bin/activate
 
-NumPy
+# Core deps
+pip install --upgrade pip
+pip install torch opencv-python numpy
+# If you have an NVIDIA GPU, install the CUDA build of torch per pytorch.org
+```
 
-FFmpeg (optional, for video re-encoding)
+### FFmpeg (optional but useful)
 
-Installation
+- **Windows:** Install FFmpeg and add it to PATH.  
+- **Linux/macOS:** Install via your package manager or official builds.  
 
-Clone this repository:
+The tool will still work without FFmpeg, but **pre‑encoding** can fix many decode issues and make processing smoother.
 
-git clone https://github.com/ayankhanakaak/2D-to-3D-Photo-and-Videos.git
-cd 2D-to-3D-Photo-and-Videos
+---
 
-Install dependencies:
+## 📥 Models (MiDaS)
 
-pip install torch torchvision opencv-python numpy
+The app loads MiDaS models directly via **`torch.hub`** from `intel-isl/MiDaS`. On first run, it will **download** the model weights to your Torch cache:
 
-(Optional) Install FFmpeg for video re-encoding:
+- `DPT_Large` → `dpt_large_384.pt` (highest quality, slowest)  
+- `DPT_Hybrid` → `dpt_hybrid_384.pt` (quality/speed balance)  
+- `MiDaS_small` → `midas_v21_small_256.pt` (fastest, lower quality)
 
-FFmpeg Installation Guide
+You can also **provide your own model file** (for offline use). The tool will copy it into `~/.cache/torch/hub/checkpoints/` with the expected filename.
 
-Usage
+---
 
-Run the script and follow the prompts:
+## ▶️ Usage (Interactive CLI)
 
+Run the script (quote the filename since it has spaces):
+
+```bash
 python "2D to 3D Photo and Video.py"
+```
 
-You will be prompted to:
+You will be asked a few simple questions:
 
-Choose a depth estimation model
+1) **Choose model**  
+   `1. DPT_Large` · `2. DPT_Hybrid` · `3. MiDaS_small`
 
-Select model source (download automatically or you provide path)
+2) **Model source**  
+   `1. Already Downloaded` (give path to your local .pt file)  
+   `2. Download Automatically / Use Cached` (recommended)
 
-Choose device (CPU or CUDA)
+3) **Use CUDA?**  
+   `1. Yes` (if you have an NVIDIA GPU + CUDA PyTorch)  
+   `2. No (CPU)`
 
-Enable mixed precision (optional)
+4) **Enable mixed precision (AMP)?** *(only shown when CUDA is on)*  
+   `1. Yes` (faster on modern GPUs) · `2. No`
 
-Provide input video path
+5) **Input video path**  
+   Paste or drag‑drop the full path to your source video file.
 
-Choose output format (Anaglyph or SBS)
+6) **Pre‑encode with FFmpeg?**  
+   `1. Yes` → re‑encodes to H.264/AAC for reliable decoding  
+   `2. No` → use original video as is
 
-Set maximum pixel shift
+7) **Choose output format**  
+   `1. Red/Cyan Anaglyph` (works with cheap red‑cyan glasses)  
+   `2. SBS Stereo` (two views side‑by‑side; good for VR players/TVs)
 
-Output
+8) **Max shift (pixels)**  
+   Horizontal pixel shift based on depth map. Default is **15**.  
+   Larger values = stronger 3D effect, but too large can look uncomfortable.
 
-The processed video will be saved in the same directory as the input video.
+The app will print progress every 50 frames and save the output video next to your input:
 
-Output filenames will be auto-generated to avoid overwriting.
+- **Anaglyph:** `output_anaglyph_video-<n>.mp4`  
+- **SBS:** `output_sbs_video-<n>.mp4`
 
-License
+---
 
-This project is licensed under the GPL-3.0 License.
+## 🧠 How it works (plain English)
 
-Author
+- For each frame, MiDaS predicts a **depth map** (which parts are near/far).  
+- We **normalize** that depth safely and create a **shift map**.  
+- We **warp** the original frame left/right using that shift to make **two views** (left eye, right eye).  
+- For **Anaglyph**, we mix channels (Left → Red, Right → Green+Blue).  
+- For **SBS**, we place the two views **side-by-side**.
 
-Made by: Ayan KhanVersion: 2.9.2025-1
+This is a **2D‑to‑3D approximation**. It won’t be perfect like true stereo capture, but with the right settings it looks surprisingly good.
+
+---
+
+## ⚙️ Options & Tips
+
+- **Model choice:**  
+  - *Best quality:* `DPT_Large`  
+  - *Balanced:* `DPT_Hybrid`  
+  - *Fastest:* `MiDaS_small`
+- **Max shift:** Start with **15**. Try 8–24 depending on content and comfort.
+- **FFmpeg pre‑encode:** If your video fails to open or stutters, choose **Yes**.
+- **AMP (mixed precision):** Usually faster on RTX GPUs. If you see artifacts or errors, turn it **off**.
+- **Frame rate & size:** Output uses the source **FPS** and **resolution**.  
+  SBS doubles width (W → **2W**), height stays the same.
+
+---
+
+## 🧪 Example
+
+```bash
+python "2D to 3D Photo and Video.py"
+# Choose: 2 (DPT_Hybrid)
+# Source: 2 (Auto/Cache)
+# CUDA: 1 (Yes)  → AMP: 1 (Yes)
+# Input: C:\Videos\clip.mp4
+# Pre-encode: 1 (Yes)
+# Output: 2 (SBS Stereo)
+# Max shift: 16
+# → Saved: output_sbs_video-1.mp4
+```
+
+---
+
+## 🛠 Troubleshooting
+
+- **“Failed to open video.”**  
+  Use the **FFmpeg pre‑encode** option. If it still fails, ensure FFmpeg is installed and that the path has **no special characters**.
+
+- **Very slow / Out of memory (GPU).**  
+  Use **MiDaS_small**, disable **AMP**, or switch to **CPU**. Close other GPU-heavy apps.
+
+- **Weird color/ghosting in Anaglyph.**  
+  This is normal if the 3D shift is too strong. **Lower Max shift** or try **SBS**.
+
+- **Depth looks inverted (near/far flipped).**  
+  Try smaller **Max shift**. If the scene still feels wrong, you can try inverting the direction (edit code: swap `map_x_left` and `map_x_right` lines).
+
+- **Artifacts at edges.**  
+  The script uses **border replication** to avoid holes. Minor stretching at frame borders is expected.
+
+---
+
+## 📚 Project Structure
+
+- `2D to 3D Photo and Video.py` → main interactive script  
+  - MiDaS load via `torch.hub`  
+  - Safe depth normalization  
+  - Optional **FFmpeg** re‑encode  
+  - **Anaglyph** and **SBS** writers
+
+You can rename the script if you like, just keep the code intact.
+
+---
+
+## 🗺 Roadmap (ideas)
+
+- CLI flags (non‑interactive mode)  
+- Per‑scene **depth smoothing** / temporal consistency  
+- Adjustable **parallax curve** (non‑linear shift by depth)  
+- **Green/Magenta** anaglyph and other stereo layouts  
+- **Batch processing** of folders
+
+---
+
+## 🤝 Contributing
+
+PRs and issues are welcome. Please describe your system, Python version, and exact steps to reproduce any bug.
+
+---
+
+## 📜 License
+
+Choose the license you prefer (MIT, Apache‑2.0, etc.) and add a `LICENSE` file.  
+If unsure, MIT is a good simple choice.
+
+---
+
+## 🙏 Credits
+
+- **MiDaS** by Intel ISL (loaded via `torch.hub`)  
+- Thanks to the open‑source community for PyTorch, OpenCV, NumPy, and FFmpeg.
+
