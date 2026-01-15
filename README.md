@@ -74,7 +74,7 @@ You can also **provide your own model file** (for offline use). The tool will co
 Run the script (quote the filename since it has spaces):
 
 ```bash
-python "2D to 3D Photo and Video.py"
+python "2D to 3D Photo and Video V.29.12.2025-1.py"
 ```
 
 You will be asked a few simple questions:
@@ -144,7 +144,7 @@ This is a **2D‑to‑3D approximation**. It won’t be perfect like true stereo
 ## 🧪 Example
 
 ```bash
-python "2D to 3D Photo and Video.py"
+python "2D to 3D Photo and Video V.29.12.2025-1.py"
 # Choose: 2 (DPT_Hybrid)
 # Source: 2 (Auto/Cache)
 # CUDA: 1 (Yes)  → AMP: 1 (Yes)
@@ -175,7 +175,7 @@ python "2D to 3D Photo and Video.py"
 
 ## 📚 Project Structure
 
-- `2D to 3D Photo and Video.py` → main interactive script  
+- `2D to 3D Photo and Video V.29.12.2025-1.py` → main interactive script  
   - MiDaS load via `torch.hub`  
   - Safe depth normalization  
   - Optional **FFmpeg** re‑encode  
