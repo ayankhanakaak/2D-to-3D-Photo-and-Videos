@@ -5,7 +5,7 @@ It supports **Red/Cyan Anaglyph** (red–cyan glasses) and **Side‑by‑Side** 
 Optional **CUDA acceleration**, **mixed precision** (faster on NVIDIA GPUs), and **FFmpeg pre‑encoding** are built‑in for smooth, high‑quality results.
 
 > **Author:** Ayan Khan  
-> **Current script:** `2D to 3D Photo and Video.py` (v2.9.2025‑1)
+> **Current script:** `2D to 3D Photo and Video.py` (V.29.12.2025‑1)
 
 ---
 
