@@ -25,6 +25,7 @@ Optional **CUDA acceleration**, **mixed precision** (faster on NVIDIA GPUs), and
 - **Python** 3.9+ (3.10/3.11 recommended) | 100% Tested on: 3.13.5
 - **Pip packages:**
   - `torch` (CPU or CUDA build)
+  - `tqdm`
   - `opencv-python`
   - `numpy`
 - **FFmpeg** (optional, but recommended for the pre‑encode step)
@@ -44,7 +45,7 @@ source .venv/bin/activate
 
 # Core deps (necessary)
 pip install --upgrade pip
-pip install torch opencv-python numpy
+pip install torch opencv-python numpy tqdm
 # If you have an NVIDIA GPU, install the CUDA build of torch per pytorch.org
 ```
 
