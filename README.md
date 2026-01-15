@@ -16,7 +16,7 @@ Optional **CUDA acceleration**, **mixed precision** (faster on NVIDIA GPUs), and
 - **CUDA + AMP** (automatic mixed precision) for speed on NVIDIA
 - **FFmpeg pre‑encode** option for reliable decoding of tricky source files
 - **Safe depth normalization** to avoid NaNs/Infs and crashes
-- **Progress prints** every 50 frames and a final saved path
+- **Progress bar** shows live progress and a final saved path
 
 ---
 
