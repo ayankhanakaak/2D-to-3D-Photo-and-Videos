@@ -108,7 +108,7 @@ You will be asked a few simple questions:
    Horizontal pixel shift based on depth map. Default is **15**.  
    Larger values = stronger 3D effect, but too large can look uncomfortable.
 
-The app will print progress every 50 frames and save the output video next to your input:
+The app will show live progress and save the output video next to your input:
 
 - **Anaglyph:** `output_anaglyph_video-<n>.mp4`  
 - **SBS:** `output_sbs_video-<n>.mp4`
