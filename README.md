@@ -5,7 +5,7 @@ It supports **Red/Cyan Anaglyph** (red–cyan glasses) and **Side‑by‑Side** 
 Optional **CUDA acceleration**, **mixed precision** (faster on NVIDIA GPUs), **FFmpeg pre‑encoding**, and **HW Decode/Encode** are built‑in for smooth, high‑quality results.
 
 > **Author:** Ayan Khan  
-> **Current script:** `2D to 3D Photo and Video V.15.1.2026-2.py`
+> **Current script:** `2D to 3D Photo and Video V.16.1.2026-1.py`
 
 ---
 
@@ -83,7 +83,7 @@ You can also **provide your own model file** (for offline use). The tool will co
 Run the script (quote the filename since it has spaces):
 
 ```bash
-python "2D to 3D Photo and Video V.15.1.2026-2.py"
+python "2D to 3D Photo and Video V.16.1.2026-1.py"
 ```
 Then follow on-screen prompts as per your requirements.
 
@@ -143,11 +143,7 @@ This is a **2D‑to‑3D approximation**. It won’t be perfect like true stereo
 
 ## 📚 Project Structure
 
-- `2D to 3D Photo and Video V.15.1.2026-2.py` → main interactive script  
-  - MiDaS load via `torch.hub`  
-  - Safe depth normalization  
-  - Optional **FFmpeg** re‑encode  
-  - **Anaglyph** and **SBS** writers
+- `2D to 3D Photo and Video V.16.1.2026-1.py` → main interactive script
 
 You can rename the script if you like, just keep the code intact.
 
