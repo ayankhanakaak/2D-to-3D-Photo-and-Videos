@@ -78,49 +78,14 @@ You can also **provide your own model file** (for offline use). The tool will co
 
 ---
 
-## ▶️ Usage (Interactive CLI)
+## ▶️ Run (CLI)
 
 Run the script (quote the filename since it has spaces):
 
 ```bash
 python "2D to 3D Photo and Video V.15.1.2026-2.py"
 ```
-
-You will be asked a few simple questions:
-
-1) **Choose model**  
-   `1. DPT_Large` · `2. DPT_Hybrid` · `3. MiDaS_small`
-
-2) **Model source**  
-   `1. Already Downloaded` (give path to your local .pt file)  
-   `2. Download Automatically / Use Cached` (recommended)
-
-3) **Use CUDA?**  
-   `1. Yes` (if you have an NVIDIA GPU + CUDA PyTorch)  
-   `2. No (CPU)`
-
-4) **Enable mixed precision (AMP)?** *(only shown when CUDA is on)*  
-   `1. Yes` (faster on modern GPUs) · `2. No`
-
-5) **Input video path**  
-   Paste or drag‑drop the full path to your source video file.
-
-6) **Pre‑encode with FFmpeg?**  
-   `1. Yes` → re‑encodes to H.264/AAC for reliable decoding  
-   `2. No` → use original video as is
-
-7) **Choose output format**  
-   `1. Red/Cyan Anaglyph` (works with cheap red‑cyan glasses)  
-   `2. SBS Stereo` (two views side‑by‑side; good for VR players/TVs)
-
-8) **Max shift (pixels)**  
-   Horizontal pixel shift based on depth map. Default is **15**.  
-   Larger values = stronger 3D effect, but too large can look uncomfortable.
-
-The app will show live progress and save the output video next to your input:
-
-- **Anaglyph:** `output_anaglyph_video-<n>.mp4`  
-- **SBS:** `output_sbs_video-<n>.mp4`
+Then follow on-screen prompts as per your requirements.
 
 ---
 
@@ -151,22 +116,6 @@ This is a **2D‑to‑3D approximation**. It won’t be perfect like true stereo
 
 ---
 
-## 🧪 Example
-
-```bash
-python "2D to 3D Photo and Video V.15.1.2026-2.py"
-# Choose: 2 (DPT_Hybrid)
-# Source: 2 (Auto/Cache)
-# CUDA: 1 (Yes)  → AMP: 1 (Yes)
-# Input: C:\Videos\clip.mp4
-# Pre-encode: 1 (Yes)
-# Output: 2 (SBS Stereo)
-# Max shift: 16
-# → Saved: output_sbs_video-1.mp4
-```
-
----
-
 ## 🛠 Troubleshooting
 
 - **“Failed to open video.”**  
@@ -181,13 +130,13 @@ python "2D to 3D Photo and Video V.15.1.2026-2.py"
 - **Artifacts at edges.**  
   The script uses **border replication** to avoid holes. Minor stretching at frame borders is expected.
 
-- **NVDEC failed to start**
+- **NVDEC failed to start**  
   Ensure FFmpeg supports CUDA hwaccel.
 
-- **NVENC failed**
+- **NVENC failed**  
   Use standard writer fallback.
 
-- **Check logs**
+- **Check logs**  
   `.log` files record worker activity, `.error` files capture exceptions.
 
 ---
