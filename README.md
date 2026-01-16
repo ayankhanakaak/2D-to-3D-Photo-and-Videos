@@ -2,7 +2,7 @@
 
 A simple Python tool that converts **normal 2D videos** into **immersive 3D** using **MiDaS depth estimation**.  
 It supports **Red/Cyan Anaglyph** (red–cyan glasses) and **Side‑by‑Side** (SBS) stereo output.  
-Optional **CUDA acceleration**, **mixed precision** (faster on NVIDIA GPUs), and **FFmpeg pre‑encoding** are built‑in for smooth, high‑quality results.
+Optional **CUDA acceleration**, **mixed precision** (faster on NVIDIA GPUs), **FFmpeg pre‑encoding**, and **HW Decode/Encode** are built‑in for smooth, high‑quality results.
 
 > **Author:** Ayan Khan  
 > **Current script:** `2D to 3D Photo and Video V.15.1.2026-2.py`
@@ -17,6 +17,11 @@ Optional **CUDA acceleration**, **mixed precision** (faster on NVIDIA GPUs), and
 - **FFmpeg pre‑encode** option for reliable decoding of tricky source files
 - **Safe depth normalization** to avoid NaNs/Infs and crashes
 - **Progress bar** shows live progress and a final saved path
+- **Multi‑GPU parallel processing** splits frames across GPUs, merges chunks
+- **Hardware decode (NVDEC)** for faster video input
+- **Hardware encode (NVENC)** for faster output writing
+- **CUDA Remap acceleration**, GPU‑based remapping instead of CPU
+- **Custom Batch Processing**, process multiple/single frame(s) per forward pass
 
 ---
 
@@ -30,6 +35,8 @@ Optional **CUDA acceleration**, **mixed precision** (faster on NVIDIA GPUs), and
   - `opencv-python`
   - `numpy`
 - **FFmpeg** (optional, but recommended for the pre‑encode step)
+  - FFmpeg with NVENC/NVDEC support: Requires NVIDIA GPU + proper drivers
+- **OpenCV** with CUDA support (for CUDA Remap)
 
 > ⚠️ For NVIDIA GPUs, install a **CUDA-enabled** build of PyTorch that matches your driver/CUDA version.  
 > See the official PyTorch site for the correct `pip` command for your system.
@@ -140,6 +147,7 @@ This is a **2D‑to‑3D approximation**. It won’t be perfect like true stereo
 - **AMP (mixed precision):** Usually faster on RTX GPUs. If you see artifacts or errors, turn it **off**.
 - **Frame rate & size:** Output uses the source **FPS** and **resolution**.  
   SBS doubles width (W → **2W**), height stays the same.
+- **Batch size:** Default 4; adjust correctly for speed if GPU memory allows.
 
 ---
 
@@ -172,6 +180,15 @@ python "2D to 3D Photo and Video V.15.1.2026-2.py"
 
 - **Artifacts at edges.**  
   The script uses **border replication** to avoid holes. Minor stretching at frame borders is expected.
+
+- **NVDEC failed to start**
+  Ensure FFmpeg supports CUDA hwaccel.
+
+- **NVENC failed**
+  Use standard writer fallback.
+
+- **Check logs**
+  `.log` files record worker activity, `.error` files capture exceptions.
 
 ---
 
