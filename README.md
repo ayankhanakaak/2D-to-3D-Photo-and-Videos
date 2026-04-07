@@ -5,8 +5,8 @@ Supports **Red/Cyan Anaglyph** (3 color modes with auto-focus) and **Side‑by�
 Features **multi-GPU processing**, **CUDA acceleration**, **mixed precision**, **hardware decode/encode**, and **full audio/subtitle preservation**.
 
 > **Author:** Ayan Khan  
-> **Current Version:** `V.20.1.2026-3 (MiDaS 3.1 Support)`  
-> **Script:** `2D to 3D Photo and Video V.20.1.2026-3.py`
+> **Current Version:** `V.7.4.2026-1 (MiDaS 3.1 Support)`  
+> **Script:** `2D to 3D Photo and Video V.7.4.2026-1 (MiDaS 3.1 Support).py`
 
 ---
 
@@ -100,7 +100,7 @@ ffmpeg -version
 
 ### Basic Usage
 ```bash
-python "2D to 3D Photo and Video V.20.1.2026-3.py"
+python "2D to 3D Photo and Video V.7.4.2026-1 (MiDaS 3.1 Support).py"
 ```
 
 Follow interactive prompts:
@@ -301,17 +301,7 @@ _temp_<PID>_progress_0.txt  # Frame count
 
 ---
 
-## 🗂 Project Structure
-
-```
-2D-3D-Converter/
-├── 2D to 3D Photo and Video V.20.1.2026-3.py  # Main script
-├── README.md                                   # This file
-├── LICENSE                                     # GPL-3.0
-└── examples/                                   # (optional) Sample outputs
-```
-
-### Auto-Generated Files (Temporary)
+## Auto-Generated Files (Temporary)
 ```
 _temp_<PID>_worker.py         # GPU worker script
 _temp_<PID>_chunk_0.mp4       # GPU 0 output chunk
@@ -329,7 +319,7 @@ _temp_streams_<PID>_subtitle_0.srt # Extracted subtitles
 
 ### Reporting Issues
 Please include:
-- **Script version** (`V.20.1.2026-3`)
+- **Script version** (`V.7.4.2026-1`)
 - **Python version** (`python --version`)
 - **GPU model** (if applicable)
 - **Error logs** (check `_temp_*_log_*.txt` and `*.error` files)
@@ -375,27 +365,6 @@ Open an issue describing:
 - [MiDaS 3.1 Release Notes](https://github.com/isl-org/MiDaS/releases/tag/v3_1)
 - [PyTorch Documentation](https://pytorch.org/docs/)
 - [FFmpeg Hardware Acceleration](https://trac.ffmpeg.org/wiki/HWAccelIntro)
-
----
-
-## 🔮 Roadmap
-
-- [ ] VR180/360° video support
-- [ ] Real-time webcam mode
-- [ ] Depth map export (EXR/PNG)
-- [ ] Custom anaglyph color matrices
-- [ ] Temporal consistency (optical flow)
-- [ ] GUI interface (Qt/Tkinter)
-- [ ] Docker container
-- [ ] AMD GPU support (ROCm)
-
----
-
-## 📞 Support
-
-For questions, bugs, or suggestions:
-- **GitHub Issues:** [Report here](https://github.com/YourUsername/2D-3D-Converter/issues)
-- **Discussions:** [Community forum](https://github.com/YourUsername/2D-3D-Converter/discussions)
 
 ---
 
