@@ -5,8 +5,8 @@ Supports **Red/Cyan Anaglyph** (3 color modes with auto-focus) and **Sideâ€‘byâ€
 Features **multi-GPU processing**, **CUDA acceleration**, **mixed precision**, **hardware decode/encode**, and **full audio/subtitle preservation**.
 
 > **Author:** Ayan Khan  
-> **Current Version:** `V.7.4.2026-1 (MiDaS 3.1 Support)`  
-> **Script:** `2D to 3D Photo and Video V.7.4.2026-1 (MiDaS 3.1 Support).py`
+> **Current Version:** `V.7.4.2026-4 (MiDaS 3.1 Support)`  
+> **Script:** `2D to 3D Photo and Video V.7.4.2026-4 (MiDaS 3.1 Support).py`
 
 ---
 
@@ -100,7 +100,7 @@ ffmpeg -version
 
 ### Basic Usage
 ```bash
-python "2D to 3D Photo and Video V.7.4.2026-1 (MiDaS 3.1 Support).py"
+python "2D to 3D Photo and Video V.7.4.2026-4 (MiDaS 3.1 Support).py"
 ```
 
 Follow interactive prompts:
@@ -319,7 +319,7 @@ _temp_streams_<PID>_subtitle_0.srt # Extracted subtitles
 
 ### Reporting Issues
 Please include:
-- **Script version** (`V.7.4.2026-1`)
+- **Script version** (`V.7.4.2026-4`)
 - **Python version** (`python --version`)
 - **GPU model** (if applicable)
 - **Error logs** (check `_temp_*_log_*.txt` and `*.error` files)
