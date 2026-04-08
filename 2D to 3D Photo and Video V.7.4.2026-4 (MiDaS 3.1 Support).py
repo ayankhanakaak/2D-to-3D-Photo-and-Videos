@@ -1,5 +1,3 @@
-#Code by Claude!
-
 # 2D to 3D Photo and Video V.7.4.2026-4 (MiDaS 3.1 Support)
 '''
 Made by: Ayan Khan
