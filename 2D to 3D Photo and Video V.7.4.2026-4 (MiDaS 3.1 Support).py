@@ -1422,12 +1422,12 @@ if num_gpus > 0:
     while True:
         try:
             if num_gpus > 1:
-                dev = 1  # int(input(...))
+                dev = 1  # int(input(f"\nGPU Options:\n1. Use all {num_gpus} GPUs\n2. Single GPU\n3. CPU only\n>>> "))
                 if dev == 1: use_cuda = use_multi_gpu = True; break
                 elif dev == 2: use_cuda = True; break
                 elif dev == 3: break
             else:
-                dev = 1  # int(input(...))
+                dev = 1  # int(input("\nUse GPU?\n1. Yes\n2. No\n>>> "))
                 if dev == 1: use_cuda = True; break
                 elif dev == 2: break
             print("Invalid!\n")
@@ -1475,21 +1475,21 @@ while True:
         break
     print("Cannot be empty!")
 
-recode        = 1  # int(input(...)) == 1
-output_choice = 1  # int(input(...))
+recode        = 1  # int(input("\nPre-encode for reliability?\n1. Yes\n2. No\n>>> ") or "2") == 1
+output_choice = 1  # int(input("\nOutput type:\n1. Red/Cyan Anaglyph\n2. SBS Stereo\n>>> ") or "2")
 
 anaglyph_mode = 1
 if output_choice == 1:
     while True:
         try:
-            anaglyph_mode = 2  # int(input(...))
+            anaglyph_mode = 2  # int(input("\nChoose Anaglyph Mode:\n1. Full Color\n2. Half Color\n3. Gray\n>>> ") or "1")
             if anaglyph_mode in [1, 2, 3]:
                 break
             print("Enter 1–3!\n")
         except ValueError:
             print("Enter a number 1–3!\n")
 
-max_shift = 20  # int(input("Max shift [15]: ") or "15")
+max_shift = 20  # int(input("Max shift [20]: ") or "20")
 
 if recode:
     if is_safe_format(video_path):
