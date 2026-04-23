@@ -5,8 +5,8 @@ Supports **Red/Cyan Anaglyph** (3 color modes with auto-focus) and **Side‑by�
 Features **multi-GPU processing**, **CUDA acceleration**, **mixed precision**, **hardware decode/encode**, and **full audio/subtitle preservation**.
 
 > **Author:** Ayan Khan  
-> **Current Version:** `V.7.4.2026-4 (MiDaS 3.1 Support)`  
-> **Script:** `2D to 3D Photo and Video V.7.4.2026-4 (MiDaS 3.1 Support).py`
+> **Current Version:** `V.23.4.2026-1`  
+> **Script:** `2D to 3D Photo and Video V.23.4.2026-1.py`
 
 ---
 
@@ -34,6 +34,7 @@ Features **multi-GPU processing**, **CUDA acceleration**, **mixed precision**, *
 - **CUDA Remap acceleration** — GPU-based image warping
 - **Hot-reload timm compatibility** — automatic version management (no restart needed)
 - **Safe depth normalization** — handles NaNs/Infs gracefully
+- **Custom Duration** — Convert full video or set `start_frame` and `end_frame` to save wasteful time
 
 ---
 
@@ -100,7 +101,7 @@ ffmpeg -version
 
 ### Basic Usage
 ```bash
-python "2D to 3D Photo and Video V.7.4.2026-4 (MiDaS 3.1 Support).py"
+python "2D to 3D Photo and Video V.23.4.2026-1.py"
 ```
 
 Follow interactive prompts:
@@ -319,7 +320,7 @@ _temp_streams_<PID>_subtitle_0.srt # Extracted subtitles
 
 ### Reporting Issues
 Please include:
-- **Script version** (`V.7.4.2026-4`)
+- **Script version** (`V.23.4.2026-1`)
 - **Python version** (`python --version`)
 - **GPU model** (if applicable)
 - **Error logs** (check `_temp_*_log_*.txt` and `*.error` files)
