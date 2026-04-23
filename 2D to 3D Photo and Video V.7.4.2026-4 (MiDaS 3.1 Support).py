@@ -22,6 +22,7 @@ print("Loading...")
 import subprocess
 import sys
 import os
+import gc
 import shutil
 
 def fix_timm():
@@ -628,7 +629,7 @@ GPU Worker V22
 Fixes:  FIX 3 NVENCWriter broken-pipe fallback
 Opts:   OPT 1 GPU matchTemplate, OPT 2 GPU warpAffine, OPT 3 focus caching
 """
-import os, sys, json, time, subprocess, traceback
+import os, sys, json, time, subprocess, traceback, gc
 
 # === TIMM FIX ===
 try:
@@ -809,7 +810,7 @@ class NVDECReader:
         self.frames_read = 0
         start_time = start_frame / fps
         cmd = [
-            "ffmpeg", "-hwaccel", "cuda", "-hwaccel_output_format", "cuda",
+            "ffmpeg", "-hwaccel", "cuda",
             "-ss", str(start_time), "-i", video_path,
             "-frames:v", str(self.frames_to_read),
             "-f", "rawvideo", "-pix_fmt", "bgr24", "-vsync", "0", "pipe:1"
@@ -848,23 +849,38 @@ class NVDECReader:
 
 class StandardReader:
     def __init__(self, video_path, start_frame, end_frame, w, h, fps):
-        self.cap = cv2.VideoCapture(video_path)
-        if not self.cap.isOpened():
-            raise RuntimeError("Failed to open video")
-        self.cap.set(cv2.CAP_PROP_POS_FRAMES, start_frame)
+        self.w, self.h = w, h
+        self.frame_size = w * h * 3
         self.frames_to_read = end_frame - start_frame
         self.frames_read = 0
+        start_time = start_frame / fps
+        cmd = [
+            "ffmpeg", "-ss", str(start_time), "-i", video_path,
+            "-frames:v", str(self.frames_to_read),
+            "-f", "rawvideo", "-pix_fmt", "bgr24", "-vsync", "0", "pipe:1"
+        ]
+        self.process = subprocess.Popen(
+            cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            bufsize=self.frame_size * 10,
+            env={**os.environ, "PYTHONUNBUFFERED": "1"}
+        )
 
     def read(self):
         if self.frames_read >= self.frames_to_read:
             return False, None
-        ret, frame = self.cap.read()
-        if ret:
-            self.frames_read += 1
-        return ret, frame
+        raw = self.process.stdout.read(self.frame_size)
+        if len(raw) != self.frame_size:
+            return False, None
+        frame = np.frombuffer(raw, dtype=np.uint8).reshape((self.h, self.w, 3)).copy()
+        self.frames_read += 1
+        return True, frame
 
     def release(self):
-        self.cap.release()
+        try:
+            self.process.terminate()
+            self.process.wait(timeout=5)
+        except:
+            self.process.kill()
 
 # FIX 3: NVENCWriter exposes .failed flag for mid-run fallback
 class NVENCWriter:
@@ -1094,6 +1110,11 @@ def main():
                     pf.write(str(frames_done))
                 last_progress_write = time.time()
 
+            try: del batch_frames, input_tensors, batch_tensor, predictions, depths
+            except NameError: pass
+            gc.collect()
+            torch.cuda.empty_cache()
+
         with open(progress_file, "w") as pf:
             pf.write(str(frames_done))
         reader.release()
@@ -1154,7 +1175,7 @@ def single_gpu_process(model_type, video_path, out_path, max_shift, output_choic
         try:
             frame_size = w * h * 3
             cmd = [
-                'ffmpeg', '-hwaccel', 'cuda', '-hwaccel_output_format', 'cuda',
+                'ffmpeg', '-hwaccel', 'cuda',
                 '-i', video_path,
                 '-f', 'rawvideo', '-pix_fmt', 'bgr24', '-vsync', '0', 'pipe:1'
             ]
@@ -1245,7 +1266,7 @@ def single_gpu_process(model_type, video_path, out_path, max_shift, output_choic
 
     print(f"\nProcessing {total} frames on {device} [Batch: {batch_size}]...")
     pbar = tqdm(total=total, desc="Processing", unit="frame",
-                mininterval=1, dynamic_ncols=True, file=sys.stdout)
+                mininterval=1, dynamic_ncols=True, file=sys.stderr)
     frames_written     = 0
     # OPT 3: focus cache state
     cached_focus_px    = [None]
@@ -1321,6 +1342,11 @@ def single_gpu_process(model_type, video_path, out_path, max_shift, output_choic
 
                 frames_written += 1
                 pbar.update(1)
+            
+            try: del batch_frames, input_tensors, batch_tensor, predictions, depths
+            except NameError: pass
+            gc.collect()
+            torch.cuda.empty_cache()
     finally:
         release_reader()
         if writer_process:
@@ -1460,12 +1486,12 @@ if use_cuda:
     focus_cache_interval = batch_size  # recompute once per batch by default
 
 while True:
-    video_path = "/kaggle/input/datasets/ayankhanakaak/universal-centennial-logo/Universal Centennial Logo.mp4".strip().strip('"').strip("'")
+    video_path = "/kaggle/input/datasets/ayankhanakaak/gap-file/Gap.mp4".strip().strip('"').strip("'")
     if os.path.isfile(video_path): break
     print("Not found!")
 
 while True:
-    out_path = "/kaggle/working/Universal Centennial Logo - RCA 3D.mp4".strip().strip('"').strip("'")
+    out_path = "/kaggle/working/Gap - RCA 3D.mp4".strip().strip('"').strip("'")
     if out_path:
         if not out_path.lower().endswith((".mp4", ".avi", ".mov", ".mkv")):
             out_path += ".mp4"
@@ -1591,7 +1617,7 @@ if use_multi_gpu and num_gpus > 1:
 
     print(f"\nProcessing {total_frames} frames [Batch: {batch_size}]...")
     pbar       = tqdm(total=total_frames, desc="Processing", unit="frame",
-                      mininterval=1, dynamic_ncols=True, file=sys.stdout)
+                      mininterval=1, dynamic_ncols=True, file=sys.stderr)
     last_total = 0
     start_time = time.time()
 
