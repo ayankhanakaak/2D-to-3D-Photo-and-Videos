@@ -1534,7 +1534,7 @@ elif duration_type==2:
         try:
             start_frame = 0 #int(input("Start Frame: "))
             end_frame = None #int(input("End Frame: "))
-            if end_frame > start_frame:
+            if end_frame is None or end_frame>start_frame:
                 break
             else:
                 print("End frame must be higher than start frame!\n")
