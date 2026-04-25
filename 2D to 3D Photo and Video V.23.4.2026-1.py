@@ -1501,12 +1501,12 @@ if use_cuda:
     focus_cache_interval = batch_size  # recompute once per batch by default
 
 while True:
-    video_path = "/kaggle/working/".strip().strip('"').strip("'")
+    video_path = input("Enter input video: ").strip().strip('"').strip("'")
     if os.path.isfile(video_path): break
     print("Not found!")
 
 while True:
-    out_path = "/kaggle/working/".strip().strip('"').strip("'")
+    out_path = input("Enter output: ").strip().strip('"').strip("'")
     if out_path:
         if not out_path.lower().endswith((".mp4", ".avi", ".mov", ".mkv")):
             out_path += ".mp4"
