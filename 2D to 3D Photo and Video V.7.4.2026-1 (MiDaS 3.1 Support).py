@@ -1127,7 +1127,7 @@ while True:
 # Model source
 while True:
     try:
-        answer = 2#int(input("Model source:\n1. Already Downloaded\n2. Download Automatically/Use Cached\n>>> "))
+        answer = int(input("Model source:\n1. Already Downloaded\n2. Download Automatically/Use Cached\n>>> "))
         if answer == 1:
             while True:
                 try:
@@ -1165,12 +1165,12 @@ if num_gpus > 0:
     while True:
         try:
             if num_gpus > 1:
-                dev = 1#int(input(f"\nGPU Options:\n1. Use all {num_gpus} GPUs\n2. Single GPU\n3. CPU only\n>>> "))
+                dev = int(input(f"\nGPU Options:\n1. Use all {num_gpus} GPUs\n2. Single GPU\n3. CPU only\n>>> "))
                 if dev == 1: use_cuda = use_multi_gpu = True; break
                 elif dev == 2: use_cuda = True; break
                 elif dev == 3: break
             else:
-                dev = 1#int(input("\nUse GPU?\n1. Yes\n2. No\n>>> "))
+                dev = int(input("\nUse GPU?\n1. Yes\n2. No\n>>> "))
                 if dev == 1: use_cuda = True; break
                 elif dev == 2: break
             print("Invalid!\n")
@@ -1181,29 +1181,29 @@ use_amp = use_nvdec = use_nvenc = use_cuda_remap = False
 batch_size = 4
 
 if use_cuda:
-    use_amp = 1#int(input("Mixed precision?\n1. Yes\n2. No\n>>> ") or "1") == 1
+    use_amp = int(input("Mixed precision?\n1. Yes\n2. No\n>>> ") or "1") == 1
     
     print("\n⚡ Acceleration Options:")
     if HAS_NVDEC:
-        use_nvdec = 2#int(input("NVDEC (HW decode)?\n1. Yes\n2. No\n>>> ") or "2") == 1
+        use_nvdec = int(input("NVDEC (HW decode)?\n1. Yes\n2. No\n>>> ") or "2") == 1
     if HAS_NVENC:
-        use_nvenc = 1#int(input("NVENC (HW encode)?\n1. Yes\n2. No\n>>> ") or "1") == 1
+        use_nvenc = int(input("NVENC (HW encode)?\n1. Yes\n2. No\n>>> ") or "1") == 1
     if HAS_CUDA_REMAP:
-        use_cuda_remap = 1#int(input("CUDA Remap?\n1. Yes\n2. No\n>>> ") or "2") == 1
+        use_cuda_remap = int(input("CUDA Remap?\n1. Yes\n2. No\n>>> ") or "2") == 1
     
     try:
-        batch_size = 9#int(input("Batch size [4]: ") or "4")
+        batch_size = int(input("Batch size [4]: ") or "4")
     except:
         batch_size = 4
 
 # Paths
 while True:
-    video_path = "/kaggle/input/datasets/ayankhanakaak/universal-centennial-logo/Universal Centennial Logo.mp4".strip().strip('"').strip("'")
+    video_path = input("Enter video path: ").strip().strip('"').strip("'")
     if os.path.isfile(video_path): break
     print("Not found!")
 
 while True:
-    out_path = "/kaggle/working/Universal Centennial Logo - RCA 3D.mp4".strip().strip('"').strip("'")
+    out_path = input("Enter output: ").strip().strip('"').strip("'")
     if out_path:
         if not out_path.lower().endswith((".mp4", ".avi", ".mov", ".mkv")):
             out_path += ".mp4"
@@ -1213,22 +1213,22 @@ while True:
         break
     print("Cannot be empty!")
 
-recode = 1#int(input("\nPre-encode for reliability?\n1. Yes\n2. No\n>>> ") or "2") == 1
-output_choice = 1#int(input("\nOutput type:\n1. Red/Cyan Anaglyph\n2. SBS Stereo\n>>> ") or "2")
+recode = int(input("\nPre-encode for reliability?\n1. Yes\n2. No\n>>> ") or "2") == 1
+output_choice = int(input("\nOutput type:\n1. Red/Cyan Anaglyph\n2. SBS Stereo\n>>> ") or "2")
 
 # Anaglyph mode selection (only if anaglyph output is chosen)
 anaglyph_mode = 1  # Default: Full Color
 if output_choice == 1:
     while True:
         try:
-            anaglyph_mode = 2#int(input("\nChoose Anaglyph Mode:\n1. Full Color\n2. Half Color\n3. Gray\n>>> ") or "1")
+            anaglyph_mode = int(input("\nChoose Anaglyph Mode:\n1. Full Color\n2. Half Color\n3. Gray\n>>> ") or "1")
             if anaglyph_mode in [1, 2, 3]:
                 break
             print("Enter 1–3!\n")
         except ValueError:
             print("Enter a number 1–3!\n")
 
-max_shift = 20#int(input("Max shift [15]: ") or "15")
+max_shift = int(input("Max shift [15]: ") or "15")
 
 if recode:
     if is_safe_format(video_path):
