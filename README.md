@@ -300,12 +300,6 @@ Open an issue describing:
 - Expected behavior
 - Why current features don't cover it
 
-### Pull Requests
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/YourFeature`)
-3. Test thoroughly (multiple videos, GPU/CPU, different models, timeout behaviour)
-4. Submit PR with description
-
 ---
 
 ## 📜 License
