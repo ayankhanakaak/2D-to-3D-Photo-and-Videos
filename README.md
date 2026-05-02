@@ -2,8 +2,7 @@
 
 A powerful Python tool that converts **normal 2D videos** into **immersive 3D** using **MiDaS depth estimation**.  
 Supports **Red/Cyan Anaglyph** with automatic focus adjustment and **Side‑by‑Side** (SBS) stereo output.  
-Features **multi‑GPU processing**, **CUDA acceleration**, **mixed precision**, **hardware decode/encode**, and **full audio/subtitle preservation**.  
-**New in V.25.4.2026-1:** ⏱️ **Configurable max runtime** with graceful partial output – never waste time on long conversions again!
+Features **multi‑GPU processing**, **CUDA acceleration**, **mixed precision**, **hardware decode/encode**, and **full audio/subtitle preservation**, **configurable max runtime** with graceful partial output.
 
 > **Author:** Ayan Khan  
 > **Current Version:** `V.25.4.2026-1`  
