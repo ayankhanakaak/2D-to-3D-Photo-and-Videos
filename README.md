@@ -1,40 +1,42 @@
 # 2D → 3D Video Converter (MiDaS 3.1)
 
 A powerful Python tool that converts **normal 2D videos** into **immersive 3D** using **MiDaS depth estimation**.  
-Supports **Red/Cyan Anaglyph** (3 color modes with auto-focus) and **Side‑by‑Side** (SBS) stereo output.  
-Features **multi-GPU processing**, **CUDA acceleration**, **mixed precision**, **hardware decode/encode**, and **full audio/subtitle preservation**.
+Supports **Red/Cyan Anaglyph** with automatic focus adjustment and **Side‑by‑Side** (SBS) stereo output.  
+Features **multi‑GPU processing**, **CUDA acceleration**, **mixed precision**, **hardware decode/encode**, and **full audio/subtitle preservation**.  
+**New in V.25.4.2026-1:** ⏱️ **Configurable max runtime** with graceful partial output – never waste time on long conversions again!
 
 > **Author:** Ayan Khan  
-> **Current Version:** `V.23.4.2026-1`  
-> **Script:** `2D to 3D Photo and Video V.23.4.2026-1.py`
+> **Current Version:** `V.25.4.2026-1`  
+> **Script:** `2D to 3D Photo and Video V.25.4.2026-1.py`
 
 ---
 
 ## ✨ Key Features
 
 ### 🎬 Video Processing
-- **MiDaS 3.1 support** with 12 depth models (BEiT, Swin, Next-ViT, LeViT)
+- **MiDaS 3.1 support** with 12 depth models (BEiT, Swin, Next‑ViT, LeViT)
 - **MiDaS 3.0 compatibility** (DPT_Large, DPT_Hybrid, MiDaS_small)
-- **Multi-GPU parallel processing** — splits frames across GPUs, automatically merges
-- **Audio/subtitle preservation** — full metadata, track names, languages retained
-- **Hardware acceleration** — NVDEC (decode), NVENC (encode), CUDA Remap
-- **Batch processing** — configurable batch size for optimal GPU utilization
-- **Progress tracking** — real-time FPS counter with tqdm
+- **Multi‑GPU parallel processing** – splits frames across GPUs, automatically merges (or saves partial chunks on timeout)
+- **Audio/subtitle preservation** – full metadata, track names, languages retained
+- **Hardware acceleration** – NVDEC (decode), NVENC (encode), CUDA Remap – **auto‑enabled** when available
+- **Batch processing** – fixed batch size (9) for optimal GPU utilization
+- **Progress tracking** – real‑time FPS counter with tqdm
 
 ### 🕶️ 3D Output Modes
-- **Red/Cyan Anaglyph** with 3 color modes:
-  - **Full Color** — vivid 3D with red-cyan glasses
-  - **Half Color** — grayscale left eye, color right (reduced ghosting)
-  - **Gray** — monochrome for maximum compatibility
-- **Side-by-Side (SBS)** — for VR headsets, 3D TVs, cross-eye viewing
-- **Auto-focus adjustment** — cross-correlation based subject detection
+- **Red/Cyan Anaglyph** (default) with 3 color modes (user‑selectable):
+  - **Full Color** – vivid 3D with red‑cyan glasses
+  - **Half Color** – grayscale left eye, color right (reduced ghosting) – **default**
+  - **Gray** – monochrome for maximum compatibility
+- **Side‑by‑Side (SBS)** – for VR headsets, 3D TVs, cross‑eye viewing
+- **Auto‑focus adjustment** – cross‑correlation based subject detection
 
-### ⚡ Performance
-- **Automatic mixed precision (AMP)** — faster inference on NVIDIA RTX/Ampere+
-- **CUDA Remap acceleration** — GPU-based image warping
-- **Hot-reload timm compatibility** — automatic version management (no restart needed)
-- **Safe depth normalization** — handles NaNs/Infs gracefully
-- **Custom Duration** — Convert full video or set `start_frame` and `end_frame` to save wasteful time
+### ⚡ Performance & Usability
+- **Automatic mixed precision (AMP)** – faster inference on NVIDIA RTX/Ampere+
+- **CUDA Remap acceleration** – GPU‑based image warping
+- **Hot‑reload timm compatibility** – automatic version management (no restart needed)
+- **Safe depth normalization** – handles NaNs/Infs gracefully
+- **Max runtime control** – set a time limit; partial output saved as separate video parts or single truncated file
+- **Forced pre‑encode** – converts input to a reliable constant‑frame‑rate format
 
 ---
 
@@ -43,11 +45,11 @@ Features **multi-GPU processing**, **CUDA acceleration**, **mixed precision**, *
 ### Core Dependencies
 - **Python** 3.10–3.13 (tested on 3.12)
 - **PyTorch** 2.0+ with CUDA support (for GPU acceleration)
-- **timm** 0.6.13 (auto-managed for MiDaS 3.1 models)
-- **opencv-python** 4.5+
+- **timm** 0.6.13 (auto‑managed for MiDaS 3.1 models)
+- **opencv‑python** 4.5+
 - **numpy** < 2.2 (for compatibility)
-- **tqdm** — progress bars
-- **FFmpeg** — video I/O, hardware codecs
+- **tqdm** – progress bars
+- **FFmpeg** – video I/O, hardware codecs
 
 ### Optional (Recommended)
 - **NVIDIA GPU** with CUDA 11.8+ drivers
@@ -101,18 +103,20 @@ ffmpeg -version
 
 ### Basic Usage
 ```bash
-python "2D to 3D Photo and Video V.23.4.2026-1.py"
+python "2D to 3D Photo and Video V.25.4.2026-1.py"
 ```
 
-Follow interactive prompts:
+Follow the simplified interactive prompts:
 1. **Choose depth model** (1–12)
-2. **Select GPU/CPU** processing
-3. **Enable hardware acceleration** (NVDEC/NVENC)
-4. **Set batch size** (4–16, depending on VRAM)
-5. **Input/output paths**
-6. **Output format** (Anaglyph/SBS)
-7. **Anaglyph mode** (if applicable)
-8. **Max shift** (depth strength, default 15)
+2. **Select GPU/CPU** processing (multi‑GPU supported)
+3. **Enter video input/output paths**
+4. **Set duration** (full or custom start/end frames)
+5. **Choose anaglyph mode** (1=Full Color, 2=Half Color, 3=Gray) – defaults to **Half Color**
+6. **Set max runtime** (seconds) – script will stop gracefully and save partial output
+   - For single‑GPU: output contains frames processed up to timeout
+   - For multi‑GPU: each GPU’s chunk saved as a separate `_PartX.mp4` file, preserving audio/subs per part
+
+All hardware acceleration options (NVDEC, NVENC, CUDA Remap, CUDA Focus, AMP) are **automatically enabled** if supported. Batch size is fixed at 9. The input is always pre‑encoded to a reliable format.
 
 ### Example Session
 ```
@@ -126,30 +130,25 @@ Follow interactive prompts:
 GPU Options:
 >>> 1  # Use all GPUs
 
-⚡ Acceleration Options:
-NVENC (HW encode)?
->>> 1  # Yes
+Enter video input path: input.mp4
+Enter video output path: output_3d.mp4
 
-Batch size [4]: 
->>> 12
-
-Input Video >>> input.mp4
-Output Video >>> output_3d.mp4
-
-Pre-encode for reliability?
->>> 1  # Yes (recommended)
-
-Output type:
->>> 1  # Red/Cyan Anaglyph
+Choose duration:
+ 1. Full Video
+ 2. Custom
+>>> 1
 
 Choose Anaglyph Mode:
->>> 2  # Half Color
+1. Full Color
+2. Half Color
+3. Gray
+>>> 2
 
-Max shift [15]: 
->>> 20
+Enter max runtime in seconds: 3600
 
 🚀 Processing...
-✅ Done! 14520 frames, 3945.2s, 3.68 FPS
+✅ Done! 14520 frames processed, 3490.2s, 4.16 FPS (timeout reached – partial output saved)
+   Saved: output_3d_Part1.mp4, output_3d_Part2.mp4
 ```
 
 ---
@@ -158,78 +157,65 @@ Max shift [15]:
 
 ### Depth Estimation Pipeline
 1. **Video decode** → Read frames (NVDEC optional)
-2. **MiDaS inference** → Predict depth maps (batch processing)
+2. **MiDaS inference** → Predict depth maps (batch processing, batch size = 9)
 3. **Depth normalization** → Safe handling of NaNs/Infs
-4. **Stereo generation** → Warp frames based on depth
-5. **Focus adjustment** → Cross-correlation alignment (Anaglyph only)
-6. **Output encoding** → Write 3D video (NVENC optional)
+4. **Stereo generation** → Warp frames based on depth (CUDA Remap if available)
+5. **Focus adjustment** → Cross‑correlation alignment (only for Anaglyph)
+6. **Output encoding** → Write 3D video (NVENC if available)
 7. **Audio remux** → Reattach extracted audio/subtitle tracks
 
+### Timeout & Partial Output
+- You specify a **maximum runtime** (in seconds).
+- Every few frames the script checks the elapsed time.
+- When the timeout is reached, processing stops gracefully.
+- **Single‑GPU:** the output video contains all frames processed so far (audio/subs aligned).
+- **Multi‑GPU:** each worker saves its partial chunk; the main script packages them as separate `_PartX.mp4` files with proper audio/subtitles extracted for each part.
+
 ### Anaglyph Focus Adjustment
-- **Cross-correlation matching** on center band of frames
+- **Cross‑correlation matching** on center band of frames
 - **Automatic shift detection** for natural depth placement
 - **Bilateral warping** positions subject slightly in front of screen
 - **Reduces ghosting** compared to naive channel mixing
 
-### Multi-GPU Strategy
-- **Frame splitting** — each GPU processes contiguous chunks
-- **Parallel inference** — workers run simultaneously
-- **Chunk merging** — FFmpeg concatenates outputs
-- **Synchronized progress** — unified progress bar across GPUs
+### Multi‑GPU Strategy
+- **Frame splitting** – each GPU processes contiguous chunks
+- **Parallel inference** – workers run simultaneously
+- **Chunk merging** – FFmpeg concatenates full outputs (or saves parts on timeout)
+- **Synchronized progress** – unified progress bar across GPUs
 
 ---
 
 ## ⚙️ Advanced Configuration
 
-### Performance Tuning
+### Performance Tuning (Fixed Parameters in V.25)
 
-| Setting | Low VRAM (6GB) | High VRAM (24GB+) |
-|---------|----------------|-------------------|
-| **Model** | MiDaS_small | DPT_BEiT_L_512 |
-| **Batch Size** | 2–4 | 12–16 |
-| **AMP** | Off | On |
-| **CUDA Remap** | Off | On |
+| Parameter | Value | Notes |
+|-----------|-------|-------|
+| **Batch size** | 9 | Fixed for optimal throughput |
+| **AMP** | Auto‑enabled if CUDA available | Use mixed precision |
+| **NVDEC** | Auto‑enabled if supported | Hardware decode |
+| **NVENC** | Auto‑enabled if supported | Hardware encode |
+| **CUDA Remap** | Auto‑enabled if available | GPU warping |
+| **CUDA Focus** | Auto‑enabled if available | GPU cross‑correlation |
+| **Pre‑encode** | Always enabled | Converts to CFR/h264 |
 
 ### Hardware Acceleration Matrix
 
 | Feature | Requirement | Speedup |
 |---------|-------------|---------|
-| **NVDEC** | NVIDIA GPU + FFmpeg CUDA | ~10-15% |
-| **NVENC** | NVIDIA GPU + FFmpeg NVENC | ~20-30% |
-| **CUDA Remap** | OpenCV-CUDA | ~15-20% |
-| **Multi-GPU** | 2+ NVIDIA GPUs | ~2× (2 GPUs) |
-| **AMP** | NVIDIA Tensor Cores | ~30-40% |
+| **NVDEC** | NVIDIA GPU + FFmpeg CUDA | ~10‑15% |
+| **NVENC** | NVIDIA GPU + FFmpeg NVENC | ~20‑30% |
+| **CUDA Remap** | OpenCV‑CUDA | ~15‑20% |
+| **Multi‑GPU** | 2+ NVIDIA GPUs | ~2× (2 GPUs) |
+| **AMP** | NVIDIA Tensor Cores | ~30‑40% |
 
-### Optimal Settings by Hardware
+### Typical Performance (1080p video, RTX 4090)
 
-**RTX 4090 (Single GPU)**
-```
-Model: DPT_BEiT_L_512
-Batch: 16
-AMP: On
-NVENC: On
-CUDA Remap: On
-Expected: ~5-6 FPS @ 1080p
-```
-
-**RTX 3060 (12GB)**
-```
-Model: DPT_BEiT_L_384
-Batch: 8
-AMP: On
-NVENC: On
-CUDA Remap: Off
-Expected: ~3-4 FPS @ 1080p
-```
-
-**GTX 1080 Ti (11GB)**
-```
-Model: DPT_Hybrid
-Batch: 4
-AMP: Off
-NVENC: On (if driver supports)
-Expected: ~2-3 FPS @ 1080p
-```
+| Configuration | FPS | Time (10 min video) |
+|---------------|-----|---------------------|
+| Single GPU | 5.1 | ~58 min |
+| Dual GPU | 8.7 | ~34 min |
+| + NVENC + CUDA Remap | 10.3 | ~29 min |
 
 ---
 
@@ -239,42 +225,31 @@ Expected: ~2-3 FPS @ 1080p
 
 #### `'Block' object has no attribute 'drop_path'`
 **Cause:** Incompatible `timm` version  
-**Fix:** Script auto-downgrades to timm 0.6.13 (restart cell if in Jupyter/Colab)
+**Fix:** Script auto‑downgrades to timm 0.6.13 (restart cell if in Jupyter/Colab)
 
 #### `NVDEC failed to start`
 **Cause:** FFmpeg not compiled with CUDA hwaccel  
-**Fix:** Install FFmpeg from official NVIDIA builds or disable NVDEC
+**Fix:** Install FFmpeg from official NVIDIA builds or the script will fall back to standard decode.
 
 #### `Out of memory (GPU)`
 **Solutions:**
-- Reduce batch size (try 2)
-- Use smaller model (MiDaS_small)
-- Disable AMP
-- Close other GPU applications
+- Use a smaller model (MiDaS_small or DPT_Hybrid)
+- The batch size is fixed at 9; if you have less than 8GB VRAM, consider using a smaller model or CPU mode.
 
-#### `Missing chunks` (Multi-GPU)
-**Causes:**
-- NVENC/NVDEC crash
-- Worker timeout
-- Disk space full
+#### Missing chunks / partial output on timeout
+**This is expected** when the max runtime is reached. The script saves:
+- Single‑GPU: one video file with all processed frames.
+- Multi‑GPU: separate `_PartX.mp4` files for each GPU’s progress.  
+Check the console output for the exact filenames.
 
-**Fixes:**
-- Disable NVENC/NVDEC
-- Reduce batch size
-- Check worker logs in `_temp_*_log_*.txt`
-
-#### `Duration mismatch` after remux
+#### Duration mismatch after remux
 **Cause:** Frame drop during encoding  
-**Fix:** Use pre-encode option, reduce batch size
-
-#### Audio out of sync
-**Cause:** Variable frame rate (VFR) source  
-**Fix:** Enable pre-encode (converts to CFR)
+**Fix:** Pre‑encode is always enabled in V.25, which solves most VFR issues.
 
 ### Debug Mode
-Check worker logs for detailed errors:
+Check worker logs (multi‑GPU) for detailed errors:
 ```bash
-# Multi-GPU processing creates logs:
+# Multi‑GPU processing creates logs:
 _temp_<PID>_log_0.txt  # GPU 0 activity
 _temp_<PID>_log_1.txt  # GPU 1 activity
 _temp_<PID>_progress_0.txt  # Frame count
@@ -292,17 +267,10 @@ _temp_<PID>_progress_0.txt  # Frame count
 | **RMSE** | 0.254 | 0.189 | 26% better |
 | **δ < 1.25** | 95.9% | 98.1% | +2.2% |
 
-### Performance (1080p video, RTX 4090)
-| Configuration | FPS | Time (10min video) |
-|---------------|-----|-------------------|
-| Single GPU, Batch 4 | 3.2 | ~93 min |
-| Single GPU, Batch 12 | 5.1 | ~58 min |
-| Dual GPU, Batch 12 | 8.7 | ~34 min |
-| + NVENC + CUDA Remap | 10.3 | ~29 min |
-
 ---
 
-## Auto-Generated Files (Temporary)
+## 🧹 Auto‑Generated Files (Temporary)
+
 ```
 _temp_<PID>_worker.py         # GPU worker script
 _temp_<PID>_chunk_0.mp4       # GPU 0 output chunk
@@ -312,7 +280,7 @@ _temp_<PID>_log_0.txt         # Worker activity log
 _temp_streams_<PID>_audio_0.mka   # Extracted audio
 _temp_streams_<PID>_subtitle_0.srt # Extracted subtitles
 ```
-> All temp files are auto-deleted after successful processing.
+> All temporary files are auto‑deleted after successful processing (unless a timeout occurs – then the partial video parts and their accompanying audio/subs remain).
 
 ---
 
@@ -320,7 +288,7 @@ _temp_streams_<PID>_subtitle_0.srt # Extracted subtitles
 
 ### Reporting Issues
 Please include:
-- **Script version** (`V.23.4.2026-1`)
+- **Script version** (`V.25.4.2026-1`)
 - **Python version** (`python --version`)
 - **GPU model** (if applicable)
 - **Error logs** (check `_temp_*_log_*.txt` and `*.error` files)
@@ -335,16 +303,16 @@ Open an issue describing:
 ### Pull Requests
 1. Fork the repository
 2. Create feature branch (`git checkout -b feature/YourFeature`)
-3. Test thoroughly (multiple videos, GPU/CPU, different models)
+3. Test thoroughly (multiple videos, GPU/CPU, different models, timeout behaviour)
 4. Submit PR with description
 
 ---
 
 ## 📜 License
 
-**GPL-3.0** — see [LICENSE](LICENSE) file.
+**GPL‑3.0** – see [LICENSE](LICENSE) file.
 
-### Third-Party Licenses
+### Third‑Party Licenses
 - **MiDaS** — MIT License (Intel ISL)
 - **PyTorch** — BSD License
 - **OpenCV** — Apache 2.0
@@ -356,7 +324,7 @@ Open an issue describing:
 
 - **MiDaS** depth estimation by [Intel ISL](https://github.com/isl-org/MiDaS)
 - **timm** vision models by [Ross Wightman](https://github.com/huggingface/pytorch-image-models)
-- Thanks to the open-source community for PyTorch, OpenCV, NumPy, FFmpeg, and tqdm
+- Thanks to the open‑source community for PyTorch, OpenCV, NumPy, FFmpeg, and tqdm
 
 ---
 
