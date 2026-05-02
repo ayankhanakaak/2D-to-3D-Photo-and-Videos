@@ -234,7 +234,7 @@ Enter max runtime in seconds: 3600
 #### `Out of memory (GPU)`
 **Solutions:**
 - Use a smaller model (MiDaS_small or DPT_Hybrid)
-- The batch size is fixed at 9; if you have less than 8GB VRAM, consider using a smaller model or CPU mode.
+- Use a smaller batch size.
 
 #### Missing chunks / partial output on timeout
 **This is expected** when the max runtime is reached. The script saves:
