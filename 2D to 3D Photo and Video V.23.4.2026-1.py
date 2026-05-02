@@ -1,7 +1,7 @@
 # 2D to 3D Photo and Video V.23.4.2026-1
 '''
 Made by: Ayan Khan
-Version: 7.4.2026-4 (MiDas 3.1 Support)
+Version: 23.4.2026-1 (MiDas 3.1 Support)
 
 Fixes vs 7.4.2026-2:
   - FIX 1: single_gpu_process() now supports NVDEC (new use_nvdec parameter + pipe reader)
