@@ -18,7 +18,7 @@ Features **multi‑GPU processing**, **CUDA acceleration**, **mixed precision**,
 - **Multi‑GPU parallel processing** – splits frames across GPUs, automatically merges (or saves partial chunks on timeout)
 - **Audio/subtitle preservation** – full metadata, track names, languages retained
 - **Hardware acceleration** – NVDEC (decode), NVENC (encode), CUDA Remap
-- **Batch processing** – fixed batch size (9) for optimal GPU utilization
+- **Batch processing** for optimal GPU utilization
 - **Progress tracking** – real‑time FPS counter with tqdm
 
 ### 🕶️ 3D Output Modes
