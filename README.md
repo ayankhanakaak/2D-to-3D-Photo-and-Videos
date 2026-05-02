@@ -17,7 +17,7 @@ Features **multi‑GPU processing**, **CUDA acceleration**, **mixed precision**,
 - **MiDaS 3.0 compatibility** (DPT_Large, DPT_Hybrid, MiDaS_small)
 - **Multi‑GPU parallel processing** – splits frames across GPUs, automatically merges (or saves partial chunks on timeout)
 - **Audio/subtitle preservation** – full metadata, track names, languages retained
-- **Hardware acceleration** – NVDEC (decode), NVENC (encode), CUDA Remap – **auto‑enabled** when available
+- **Hardware acceleration** – NVDEC (decode), NVENC (encode), CUDA Remap
 - **Batch processing** – fixed batch size (9) for optimal GPU utilization
 - **Progress tracking** – real‑time FPS counter with tqdm
 
