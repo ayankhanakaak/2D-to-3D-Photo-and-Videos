@@ -49,6 +49,7 @@ Features **multi‑GPU processing**, **CUDA acceleration**, **mixed precision**,
 - **numpy** < 2.2 (for compatibility)
 - **tqdm** – progress bars
 - **FFmpeg** – video I/O, hardware codecs
+- ⭐ **100%** tested on Kaggle environment!
 
 ### Optional (Recommended)
 - **NVIDIA GPU** with CUDA 11.8+ drivers
